@@ -1,7 +1,7 @@
-# AstarImplementation
-Finding dynamically shortest path between two nodes
-Technologies used: C++, SDL, Artificial Intelligence
-Right click for start node
-Left Click for end node
-CTR+Left click for obstacle
+# AstarImplementation <br />
+Finding dynamically shortest path between two nodes<br />
+Technologies used: C++, SDL, Artificial Intelligence<br />
+Right click for start node<br />
+Left Click for end node<br />
+CTR+Left click for obstacle<br />
 ![photo](Astar.png)
