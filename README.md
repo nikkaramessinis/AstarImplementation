@@ -1,5 +1,5 @@
 # A* Implementation <br />
-Finding dynamically shortest path between two nodes<br />
+Finding dynamically shortest path between two nodes demo included(demo.mp4)<br />
 Technologies used: C++, SDL, Artificial Intelligence<br />
 Right click for start node<br />
 Left Click for end node<br />
