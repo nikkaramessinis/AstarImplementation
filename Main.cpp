@@ -5,7 +5,7 @@
 #undef main
 
 const int numOfTiles = 15;
-
+const int sizeOfTiles = 40;
 int sourceX = -1, sourceY = -1;
 int destX = -1, destY = -1;
 bool ctrlPressed = false;
@@ -27,33 +27,23 @@ void init() {
 }
 
 
-
 void findNeighbors(int x, int y) {
 	node* aFromTile = PathMap[x][y];
-
-	if (y > 0) {
-		if (PathMap[x][y - 1]->visited == false && PathMap[x][y - 1]->obstacle == false) {
-			aFromTile->vecNeighbors.push_front(PathMap[x][y - 1]);
-		}
-	}
-	if (y < 14) {
-		if (PathMap[x][y + 1]->visited == false && PathMap[x][y + 1]->obstacle == false) {
-			aFromTile->vecNeighbors.push_front(PathMap[x][y + 1]);
-		}
-	}
-
-	if (x > 0) {
-		if (PathMap[x - 1][y]->visited == false && PathMap[x - 1][y]->obstacle == false) {
-			aFromTile->vecNeighbors.push_front(PathMap[x - 1][y]);
-		}
-	}
-	if (x < 14) {
-		if (PathMap[x + 1][y]->visited == false && PathMap[x + 1][y]->obstacle == false) {
-			aFromTile->vecNeighbors.push_front(PathMap[x + 1][y]);
+	std::vector<std::pair<int, int>> validMoves = { {1,0}, {0,1}, {-1,0}, {0, -1} };
+	for (auto i=0; i<validMoves.size();i++)
+	{
+		int offSetX = x + validMoves[i].first;
+		int offSetY = y + validMoves[i].second;
+		if (offSetX > 0 && offSetX < 14 && offSetY>0 && offSetY < 14)
+		{
+			if (PathMap[offSetX][offSetY]->visited == false && PathMap[offSetX][offSetY]->obstacle == false) {
+				aFromTile->vecNeighbors.push_front(PathMap[offSetX][offSetY]);
+			}
 		}
 	}
 	return;
 }
+
 void findallNeighbors() {
 	for (size_t x = 0; x < numOfTiles; x++) {
 		for (size_t y = 0; y < numOfTiles; y++)
@@ -80,9 +70,8 @@ void render(SDL_Renderer* renderer) {
 		drawPath = false;
 	}
 
-
-	for (int i = 0; i < 15; i++) {
-		for (int j = 0; j < 15; j++) {
+	for (int i = 0; i < numOfTiles; i++) {
+		for (int j = 0; j < numOfTiles; j++) {
 			SDL_Rect* rect = rects[i][j];
 			rect->h = 30;
 			rect->w = 30;
@@ -114,8 +103,6 @@ void render(SDL_Renderer* renderer) {
 	SDL_RenderPresent(renderer);
 
 }
-
-
 
 void SolveAstar(node* NodeStart, node* NodeEnd)
 {
@@ -187,8 +174,8 @@ void mousePress(SDL_MouseButtonEvent& b) {
 	if (b.button == SDL_BUTTON_LEFT && ctrlPressed == true) {
 		SDL_GetMouseState(&tmpObstacleX, &tmpObstacleY);
 		if (tmpObstacleX != -1 || tmpObstacleY != -1) {
-			tmpObstacleX = tmpObstacleX / 40;
-			tmpObstacleY = tmpObstacleY / 40;
+			tmpObstacleX = tmpObstacleX / sizeOfTiles;
+			tmpObstacleY = tmpObstacleY / sizeOfTiles;
 			PathMap[tmpObstacleX][tmpObstacleY]->obstacle = true;
 			if (NodeStart != nullptr && NodeEnd != nullptr) {
 				SolveAstar(NodeStart, NodeEnd);
@@ -199,8 +186,8 @@ void mousePress(SDL_MouseButtonEvent& b) {
 	else if (b.button == SDL_BUTTON_LEFT) {
 		SDL_GetMouseState(&sourceX, &sourceY);
 		if (sourceX != 0 || sourceY != 0) {
-			sourceX = sourceX / 40;
-			sourceY = sourceY / 40;
+			sourceX = sourceX / sizeOfTiles;
+			sourceY = sourceY / sizeOfTiles;
 			NodeStart = PathMap[sourceX][sourceY];
 			if (NodeStart != nullptr && NodeEnd != nullptr) {
 				SolveAstar(NodeStart, NodeEnd);
@@ -211,8 +198,8 @@ void mousePress(SDL_MouseButtonEvent& b) {
 	else if (b.button == SDL_BUTTON_RIGHT) {
 		SDL_GetMouseState(&destX, &destY);
 		if (destX != 0 || destY != 0) {
-			destX = destX / 40;
-			destY = destY / 40;
+			destX = destX / sizeOfTiles;
+			destY = destY / sizeOfTiles;
 			NodeEnd = PathMap[destX][destY];
 			if (NodeStart != nullptr && NodeEnd != nullptr) {
 				SolveAstar(NodeStart, NodeEnd);
@@ -237,8 +224,6 @@ void handleEvents() {
 		break;
 	}
 }
-
-
 
 int main() {
 	bool isRunning = true;
