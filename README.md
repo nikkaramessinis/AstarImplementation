@@ -6,4 +6,4 @@ Technologies used: C++, SDL, Artificial Intelligence<br />
 Right click for start node<br />
 Left Click for end node<br />
 CTR+Left click for obstacle <br />
-![photo](Astar.png)
+![photo](Astarnewimg.png)
